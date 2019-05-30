@@ -1,22 +1,85 @@
+const token = '';
+const repo = `learn-co-curriculum/js-ajax-fetch-lab`;
+const user = 'bojosteph';
+const issueRepo = 'js-ajax-fetch-lab';
+
 function getToken() {
-  //change to your token to run in browser, but set
-  //back to '' before committing so all tests pass
-  return '';
+   return `${token}`
 }
+
 
 function forkRepo() {
-  const repo = 'learn-co-curriculum/js-ajax-fetch-lab';
-  //use fetch to fork it!
+ 
+  let url = `https://api.github.com/repos/${repo}/forks`
+  console.log(url)
+  fetch(url,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `token ${getToken()}`
+      }
+    })
+    .then(response => response.json())
+    .then(json => showResults(json));
 }
 
+
 function showResults(json) {
-  //use this function to display the results from forking via the API
+  const link = json.html_url
+  document.getElementById('results').innerHTML = `<a href=${link}> ${link} </a>`;
 }
 
 function createIssue() {
-  //use this function to create an issue based on the values input in index.html
+  const issueTitle = document.getElementById('title').value;
+  const issueText = document.getElementById('body').value; 
+  
+  url = `https://api.github.com/repos/${user}/${issueRepo}/issues`
+  
+  const issueData = {
+
+    "title": issueTitle,
+    "body": issueText
+
+  }
+  
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `token ${getToken()}`
+    },
+    body: JSON.stringify(issueData)
+  })
+  getIssues();
 }
 
+
 function getIssues() {
-  //once an issue is submitted, fetch all open issues to see the issues you are creating
+  url = `https://api.github.com/repos/${user}/${issueRepo}/issues`
+
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `token ${getToken()}`
+    }
+  })
+  .then(response => response.json())
+  .then(json => showIssues(json));
 }
+
+
+function showIssues(json) {
+  const issueList = json.map(
+    issue =>
+      issue.title + ' - ' + issue.body + '<br>'
+  )
+    .join('');
+  document.getElementById('issues').innerHTML = issueList;
+}
+
+
+
+
+
+
+
+
