@@ -9,29 +9,33 @@ function getToken() {
   return '';
 }
 
-function forkRepo() {
-  fetch(`${base_url}/repos/${curriculum_username}/${repo}/forks`, { method: 'post', headers: { token: getToken() } })
-    .then(response => response.json())
-    .then(json => { console.log(json); return showResults(json) })
+async function forkRepo() {
+  const response = await fetch(
+    `${base_url}/repos/${curriculum_username}/${repo}/forks`,
+    { method: 'post', headers: { token: getToken() } }
+  )
+  showResults(response.json())
 }
 
-function showResults(json) {
+async function showResults(json) {
   //use this function to display the results from forking via the API
 }
 
-function createIssue() {
-  fetch(`${base_url}/repos/${my_username}/${repo}/issues`, {
-    method: 'post',
-    headers: { token: getToken() },
-    title: document.getElementById('title'),
-    body: document.getElementById('body')
-  })
-    .then(response => showResults(response.json()))
+async function createIssue() {
+  const response = await fetch(
+    `${base_url}/repos/${my_username}/${repo}/issues`,
+    {
+      method: 'post',
+      headers: { token: getToken() },
+      title: document.getElementById('title'),
+      body: document.getElementById('body')
+    }
+  )
+  showResults(response.json())
 }
 
-function getIssues() {
-  
-  fetch(`${base_url}/repos/${my_username}/${repo}/issues`, {
+async function getIssues() {
+  return fetch(`${base_url}/repos/${my_username}/${repo}/issues`, {
     method: 'get',
     headers: { token: getToken() }
   })
