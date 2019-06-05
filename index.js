@@ -1,3 +1,8 @@
+const base_url = "https://api.github.com"
+const repo = 'js-ajax-fetch-lab';
+const curriculum_username = 'learn-co-curriculum';
+const my_username = 'ar-dov-eidelman';
+
 function getToken() {
   //change to your token to run in browser, but set
   //back to '' before committing so all tests pass
@@ -5,8 +10,9 @@ function getToken() {
 }
 
 function forkRepo() {
-  const repo = 'learn-co-curriculum/js-ajax-fetch-lab';
-  //use fetch to fork it!
+  fetch(`${base_url}/repos/${curriculum_username}/${repo}/forks`, { method: 'post', headers: { token: getToken() } })
+    .then(response => response.json())
+    .then(json => { console.log(json); return showResults(json) })
 }
 
 function showResults(json) {
@@ -14,9 +20,19 @@ function showResults(json) {
 }
 
 function createIssue() {
-  //use this function to create an issue based on the values input in index.html
+  fetch(`${base_url}/repos/${my_username}/${repo}/issues`, {
+    method: 'post',
+    headers: { token: getToken() },
+    title: document.getElementById('title'),
+    body: document.getElementById('body')
+  })
+    .then(response => showResults(response.json()))
 }
 
 function getIssues() {
-  //once an issue is submitted, fetch all open issues to see the issues you are creating
+  
+  fetch(`${base_url}/repos/${my_username}/${repo}/issues`, {
+    method: 'get',
+    headers: { token: getToken() }
+  })
 }

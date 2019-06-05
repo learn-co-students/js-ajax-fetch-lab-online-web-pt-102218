@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "description": "Try out fetch() skills on Learn",
   "main": "index.js",
+  "watch": {
+    "test": "*"
+  },
   "scripts": {
+    "watch": "npm-watch test",
     "debug-ide": "./bin/debug-ide",
     "test": "mocha -R mocha-multi --reporter-options nyan=-,json=.results.json"
   },
